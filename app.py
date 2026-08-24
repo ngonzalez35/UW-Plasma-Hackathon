@@ -44,8 +44,59 @@ st.caption(
     "density profiles, with analytically propagated profile and gradient uncertainty."
 )
 
-with st.expander("Thomson physics and Bayesian fitting equations", expanded=True):
-    st.markdown("#### 1. Thomson spectral fit — upstream diagnostic stage")
+st.info(
+    "**What this app fits:** The HDF5 file already contains processed measurements of "
+    "Tₑ, nₑ, and their uncertainties at discrete radii. This app fits those profile points; "
+    "it does not fit the raw scattered-light spectrum."
+)
+
+with st.expander("Bayesian profile model used by this app", expanded=True):
+    st.markdown(
+        "For either $f(R)=T_e(R)$ or $f(R)=n_e(R)$, the default model places a "
+        "Gaussian-process prior on a dimensionless log profile while retaining the "
+        "reported additive uncertainty in the original physical units:"
+    )
+    st.latex(
+        r"""
+        z(R)=\beta+u(R),\qquad
+        u\sim\mathcal{GP}(0,k_{5/2}),\qquad
+        f(R)=f_{\rm ref}e^{z(R)},\qquad
+        y_i\mid z\sim\mathcal N\!\left(f_{\rm ref}e^{z(R_i)},\sigma_i^2\right).
+        """
+    )
+    st.markdown("The stationary Matérn-$5/2$ covariance is")
+    st.latex(
+        r"""
+        k_{5/2}(R,R')=\sigma_z^2
+        \left(1+\frac{\sqrt5d}{\ell}+\frac{5d^2}{3\ell^2}\right)
+        \exp\!\left(-\frac{\sqrt5d}{\ell}\right),\qquad d=|R-R'|.
+        """
+    )
+    st.markdown(
+        "The nonlinear likelihood makes the posterior non-Gaussian. The interactive "
+        "implementation uses log-space quadrature over the correlation length and a Laplace "
+        "approximation over the latent values, intercept, and amplitude at each node, then "
+        "uses analytic kernel derivatives."
+    )
+    st.latex(
+        r"""
+        f'(R)=f(R)z'(R),\qquad
+        G_R(R)=\frac{d\log f}{dR}=z'(R),\qquad
+        L_{f,R}(R)=\frac{1}{z'(R)}.
+        """
+    )
+    st.caption(
+        "Bands are pointwise posterior credible intervals. A finite scale length is "
+        "withheld wherever the selected posterior interval does not identify the gradient sign."
+    )
+
+with st.expander(
+    "Background: how Thomson scattering produced these measurements", expanded=False
+):
+    st.markdown(
+        "This is the upstream diagnostic stage, included for physical context. It is not "
+        "evaluated by this application."
+    )
     st.markdown(
         "A calibrated polychromator measures the laser light scattered into several "
         "wavelength bands. A compact detector-channel model for the NSTX-U analysis is"
@@ -84,51 +135,6 @@ with st.expander("Thomson physics and Bayesian fitting equations", expanded=True
         "[NSTX-U MPTS analysis](https://www.osti.gov/servlets/purl/1510312) and the "
         "[general Thomson spectral-density model](https://docs.plasmapy.org/en/stable/"
         "api/plasmapy.diagnostics.thomson.spectral_density.html)."
-    )
-    st.warning(
-        "This application does not evaluate the spectral equations above. The bundled HDF5 "
-        "file already contains processed Tₑ, nₑ, and their uncertainties. Our inference starts "
-        "with those spatial profile points."
-    )
-
-    st.markdown("#### 2. Bayesian spatial-profile fit — this application")
-    st.markdown(
-        "For either $f(R)=T_e(R)$ or $f(R)=n_e(R)$, the default model places a "
-        "Gaussian-process prior on a dimensionless log profile while retaining the "
-        "reported additive uncertainty in the original physical units:"
-    )
-    st.latex(
-        r"""
-        z(R)=\beta+u(R),\qquad
-        u\sim\mathcal{GP}(0,k_{5/2}),\qquad
-        f(R)=f_{\rm ref}e^{z(R)},\qquad
-        y_i\mid z\sim\mathcal N\!\left(f_{\rm ref}e^{z(R_i)},\sigma_i^2\right).
-        """
-    )
-    st.markdown("The stationary Matérn-$5/2$ covariance is")
-    st.latex(
-        r"""
-        k_{5/2}(R,R')=\sigma_z^2
-        \left(1+\frac{\sqrt5d}{\ell}+\frac{5d^2}{3\ell^2}\right)
-        \exp\!\left(-\frac{\sqrt5d}{\ell}\right),\qquad d=|R-R'|.
-        """
-    )
-    st.markdown(
-        "The nonlinear likelihood makes the posterior non-Gaussian. The interactive "
-        "implementation uses log-space quadrature over the correlation length and a Laplace "
-        "approximation over the latent values, intercept, and amplitude at each node, then "
-        "uses analytic kernel derivatives."
-    )
-    st.latex(
-        r"""
-        f'(R)=f(R)z'(R),\qquad
-        G_R(R)=\frac{d\log f}{dR}=z'(R),\qquad
-        L_{f,R}(R)=\frac{1}{z'(R)}.
-        """
-    )
-    st.caption(
-        "Bands are pointwise posterior credible intervals. A finite scale length is "
-        "withheld wherever the selected posterior interval does not identify the gradient sign."
     )
 
 if not DATA_PATH.exists():

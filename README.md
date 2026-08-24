@@ -4,10 +4,15 @@ Streamlit application for reconstructing NSTX multipoint Thomson-scattering
 (MPTS) electron-temperature and electron-density profiles with quantified
 uncertainty in the profiles and their radial derivatives.
 
+The input file already contains processed measurements of (T_e), (n_e), and
+their uncertainties at discrete radii. This application reconstructs continuous
+spatial profiles from those points; it does **not** fit raw scattered-light
+spectra.
+
 ## Two different fitting stages
 
-The NSTX-U diagnostic first fits calibrated polychromator signals to a Thomson
-scattering spectrum. Schematically,
+For physical context, the NSTX-U diagnostic first fits calibrated polychromator
+signals to a Thomson-scattering spectrum. Schematically,
 
 \[
 \mu_j(T_e,n_e)=b_j+A E_L n_e
@@ -21,10 +26,9 @@ framework](https://www.osti.gov/servlets/purl/1510312) uses Selden-spectrum
 predictions, measured filter responses, detector calibration, and spectral
 chi-squared minimization for this upstream stage.
 
-This repository does **not** re-fit the raw spectrum. `nstx-profiles.hdf5`
-already contains the processed \(T_e\), \(n_e\), and reported uncertainties. The
-application starts at the second stage: Bayesian reconstruction of continuous
-spatial profiles from those discrete measurements.
+That upstream equation explains where the measurements came from; it is not
+evaluated by this repository. The application starts at the second stage:
+Bayesian reconstruction of continuous spatial profiles from those measurements.
 
 The default reconstruction is a positive latent-log Gaussian process:
 
