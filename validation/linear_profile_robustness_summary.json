@@ -1,0 +1,75 @@
+{
+  "data_path": "/Users/jakestrobel/UW-Plasma-Hackathon/nstx-profiles.hdf5",
+  "elapsed_seconds": 20.521473041997524,
+  "profiles_attempted": 1486,
+  "profiles_succeeded": 1486,
+  "profiles_failed": 0,
+  "profiles_with_convergence_warning": 286,
+  "profiles_with_length_at_optimizer_bound": 13,
+  "profiles_with_negative_posterior_median": 590,
+  "profiles_with_over_90_percent_scale_unstable": 170,
+  "by_quantity": {
+    "ne": {
+      "profiles": 743,
+      "fitted_length_scale_cm": {
+        "min": 2.9105172699380857,
+        "p05": 5.8479477994465805,
+        "median": 10.240975856114172,
+        "p95": 25.018109100910927,
+        "max": 158.87769134752162
+      },
+      "scale_unstable_fraction": {
+        "min": 0.15,
+        "p05": 0.4125,
+        "median": 0.8625,
+        "p95": 0.925,
+        "max": 0.95
+      },
+      "profile_band_below_zero_fraction": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.0375,
+        "p95": 0.09874999999999973,
+        "max": 0.575
+      },
+      "median_relative_error": {
+        "min": 0.04042085061231981,
+        "p05": 0.0409960902084025,
+        "median": 0.04253441160024697,
+        "p95": 0.09680637612279423,
+        "max": 49.48734364589039
+      }
+    },
+    "te": {
+      "profiles": 743,
+      "fitted_length_scale_cm": {
+        "min": 5.549870362981835,
+        "p05": 8.434536119316624,
+        "median": 16.50632181259945,
+        "p95": 76.59004083295062,
+        "max": 257.1432914733887
+      },
+      "scale_unstable_fraction": {
+        "min": 0.1125,
+        "p05": 0.325,
+        "median": 0.7875,
+        "p95": 0.9,
+        "max": 1.0
+      },
+      "profile_band_below_zero_fraction": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.075,
+        "p95": 0.15,
+        "max": 1.0
+      },
+      "median_relative_error": {
+        "min": 0.028189170651243333,
+        "p05": 0.029328224947948792,
+        "median": 0.042077864579595524,
+        "p95": 0.1502897721500256,
+        "max": 86.51872949402654
+      }
+    }
+  }
+}

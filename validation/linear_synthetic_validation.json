@@ -1,0 +1,91 @@
+{
+  "known_function_cases": [
+    {
+      "name": "linear",
+      "grid_size": 220,
+      "posterior_samples": 400,
+      "fitted_length_scale_cm": 24.0,
+      "profile_rmse": 0.010094743650669,
+      "gradient_rmse": 0.0056254935614268855,
+      "profile_credible_interval_coverage": 1.0,
+      "gradient_credible_interval_coverage": 1.0,
+      "scale_length_credible_interval_coverage": 1.0,
+      "scale_unstable_fraction": 0.0
+    },
+    {
+      "name": "peaked",
+      "grid_size": 220,
+      "posterior_samples": 400,
+      "fitted_length_scale_cm": 4.488380766405864,
+      "profile_rmse": 0.022103316822292867,
+      "gradient_rmse": 0.02580020382014693,
+      "profile_credible_interval_coverage": 0.9272727272727272,
+      "gradient_credible_interval_coverage": 1.0,
+      "scale_length_credible_interval_coverage": 1.0,
+      "scale_unstable_fraction": 0.11818181818181818
+    },
+    {
+      "name": "flat",
+      "expected_gradient": 0.0,
+      "median_absolute_inferred_gradient": 0.0004046466500304824,
+      "gradient_interval_contains_zero_fraction": 1.0,
+      "scale_unstable_fraction": 1.0
+    }
+  ],
+  "grid_and_sample_sensitivity": [
+    {
+      "name": "peaked",
+      "grid_size": 220,
+      "posterior_samples": 400,
+      "fitted_length_scale_cm": 4.488380766405864,
+      "profile_rmse": 0.022103316822292867,
+      "gradient_rmse": 0.02580020382014693,
+      "profile_credible_interval_coverage": 0.9272727272727272,
+      "gradient_credible_interval_coverage": 1.0,
+      "scale_length_credible_interval_coverage": 1.0,
+      "scale_unstable_fraction": 0.11818181818181818
+    },
+    {
+      "name": "peaked",
+      "grid_size": 100,
+      "posterior_samples": 200,
+      "fitted_length_scale_cm": 4.488380766405864,
+      "profile_rmse": 0.02226336881659531,
+      "gradient_rmse": 0.0255383538438965,
+      "profile_credible_interval_coverage": 0.97,
+      "gradient_credible_interval_coverage": 1.0,
+      "scale_length_credible_interval_coverage": 1.0,
+      "scale_unstable_fraction": 0.11,
+      "profile_rmse_vs_baseline": 0.002033524084834691,
+      "gradient_rmse_vs_baseline": 0.004759424889954129
+    },
+    {
+      "name": "peaked",
+      "grid_size": 220,
+      "posterior_samples": 800,
+      "fitted_length_scale_cm": 4.488380766405864,
+      "profile_rmse": 0.02205148184561915,
+      "gradient_rmse": 0.02592093216708569,
+      "profile_credible_interval_coverage": 0.9363636363636364,
+      "gradient_credible_interval_coverage": 1.0,
+      "scale_length_credible_interval_coverage": 1.0,
+      "scale_unstable_fraction": 0.11363636363636363,
+      "profile_rmse_vs_baseline": 0.0010045669035807644,
+      "gradient_rmse_vs_baseline": 0.0018433701062291932
+    },
+    {
+      "name": "peaked",
+      "grid_size": 400,
+      "posterior_samples": 400,
+      "fitted_length_scale_cm": 4.488380766405864,
+      "profile_rmse": 0.021672825640526912,
+      "gradient_rmse": 0.025119635614159235,
+      "profile_credible_interval_coverage": 0.9475,
+      "gradient_credible_interval_coverage": 1.0,
+      "scale_length_credible_interval_coverage": 1.0,
+      "scale_unstable_fraction": 0.1175,
+      "profile_rmse_vs_baseline": 0.0016799217499885609,
+      "gradient_rmse_vs_baseline": 0.003024898788833286
+    }
+  ]
+}

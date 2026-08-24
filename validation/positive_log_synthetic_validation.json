@@ -1,0 +1,141 @@
+{
+  "known_function_cases": [
+    {
+      "name": "linear",
+      "grid_size": 220,
+      "posterior_samples": 400,
+      "fitted_length_scale_cm": 9.389979533275362,
+      "profile_rmse": 0.012313601383392436,
+      "gradient_rmse": 0.012638375773728502,
+      "log_gradient_rmse": 0.007840490368006901,
+      "profile_pointwise_inclusion_fraction": 0.9681818181818181,
+      "gradient_pointwise_inclusion_fraction": 0.9227272727272727,
+      "gradient_reportable_region_inclusion_fraction": 1.0,
+      "scale_length_pointwise_inclusion_fraction": 1.0,
+      "scale_unstable_fraction": 0.17272727272727273
+    },
+    {
+      "name": "peaked",
+      "grid_size": 220,
+      "posterior_samples": 400,
+      "fitted_length_scale_cm": 6.508078991086212,
+      "profile_rmse": 0.018291830137356083,
+      "gradient_rmse": 0.017976456356598784,
+      "log_gradient_rmse": 0.07783386428626911,
+      "profile_pointwise_inclusion_fraction": 0.9272727272727272,
+      "gradient_pointwise_inclusion_fraction": 0.9863636363636363,
+      "gradient_reportable_region_inclusion_fraction": 0.9835164835164835,
+      "scale_length_pointwise_inclusion_fraction": 1.0,
+      "scale_unstable_fraction": 0.20454545454545456
+    },
+    {
+      "name": "flat",
+      "expected_gradient": 0.0,
+      "median_absolute_inferred_gradient": 0.0006828414879123075,
+      "gradient_interval_contains_zero_fraction": 1.0,
+      "scale_unstable_fraction": 1.0
+    }
+  ],
+  "grid_and_sample_sensitivity": [
+    {
+      "name": "peaked",
+      "grid_size": 220,
+      "posterior_samples": 400,
+      "fitted_length_scale_cm": 6.508078991086212,
+      "profile_rmse": 0.018291830137356083,
+      "gradient_rmse": 0.017976456356598784,
+      "log_gradient_rmse": 0.07783386428626911,
+      "profile_pointwise_inclusion_fraction": 0.9272727272727272,
+      "gradient_pointwise_inclusion_fraction": 0.9863636363636363,
+      "gradient_reportable_region_inclusion_fraction": 0.9835164835164835,
+      "scale_length_pointwise_inclusion_fraction": 1.0,
+      "scale_unstable_fraction": 0.20454545454545456
+    },
+    {
+      "name": "peaked",
+      "grid_size": 100,
+      "posterior_samples": 200,
+      "fitted_length_scale_cm": 6.508078991086212,
+      "profile_rmse": 0.018274990213306596,
+      "gradient_rmse": 0.018123025484949488,
+      "log_gradient_rmse": 0.08060303014351505,
+      "profile_pointwise_inclusion_fraction": 0.93,
+      "gradient_pointwise_inclusion_fraction": 0.96,
+      "gradient_reportable_region_inclusion_fraction": 0.9512195121951219,
+      "scale_length_pointwise_inclusion_fraction": 1.0,
+      "scale_unstable_fraction": 0.21,
+      "profile_rmse_vs_baseline": 0.0005090392606558976,
+      "gradient_rmse_vs_baseline": 0.0009345693087892002
+    },
+    {
+      "name": "peaked",
+      "grid_size": 220,
+      "posterior_samples": 800,
+      "fitted_length_scale_cm": 6.508078991086212,
+      "profile_rmse": 0.0182872853118596,
+      "gradient_rmse": 0.017919491814607294,
+      "log_gradient_rmse": 0.07789168445705334,
+      "profile_pointwise_inclusion_fraction": 0.9272727272727272,
+      "gradient_pointwise_inclusion_fraction": 0.9772727272727273,
+      "gradient_reportable_region_inclusion_fraction": 0.9725274725274725,
+      "scale_length_pointwise_inclusion_fraction": 1.0,
+      "scale_unstable_fraction": 0.2,
+      "profile_rmse_vs_baseline": 0.0001471926424892799,
+      "gradient_rmse_vs_baseline": 0.000496637184106742
+    },
+    {
+      "name": "peaked",
+      "grid_size": 400,
+      "posterior_samples": 400,
+      "fitted_length_scale_cm": 6.508078991086212,
+      "profile_rmse": 0.018300008394051416,
+      "gradient_rmse": 0.017944411822509658,
+      "log_gradient_rmse": 0.07744396336375564,
+      "profile_pointwise_inclusion_fraction": 0.93,
+      "gradient_pointwise_inclusion_fraction": 0.975,
+      "gradient_reportable_region_inclusion_fraction": 0.9698795180722891,
+      "scale_length_pointwise_inclusion_fraction": 1.0,
+      "scale_unstable_fraction": 0.1975,
+      "profile_rmse_vs_baseline": 0.00015613794297247036,
+      "gradient_rmse_vs_baseline": 0.0004914088478620278
+    }
+  ],
+  "repeated_calibration": [
+    {
+      "name": "linear",
+      "repetitions": 20,
+      "mean_profile_pointwise_coverage": 0.9133333333333333,
+      "mean_gradient_pointwise_coverage": 0.8766666666666666,
+      "mean_gradient_reportable_region_coverage": 0.938,
+      "mean_log_gradient_pointwise_coverage": 0.8808333333333331,
+      "mean_log_gradient_reportable_region_coverage": 0.943,
+      "mean_profile_rmse": 0.017855344949516343,
+      "mean_gradient_rmse": 0.01556682143342008,
+      "mean_nonpositive_lower_band_fraction": 0.0
+    },
+    {
+      "name": "peaked",
+      "repetitions": 20,
+      "mean_profile_pointwise_coverage": 0.9408333333333333,
+      "mean_gradient_pointwise_coverage": 0.9674999999999999,
+      "mean_gradient_reportable_region_coverage": 0.9629999999999999,
+      "mean_log_gradient_pointwise_coverage": 0.9666666666666668,
+      "mean_log_gradient_reportable_region_coverage": 0.962,
+      "mean_profile_rmse": 0.01753255700939455,
+      "mean_gradient_rmse": 0.01751493468631158,
+      "mean_nonpositive_lower_band_fraction": 0.0
+    },
+    {
+      "name": "flat",
+      "repetitions": 20,
+      "mean_profile_pointwise_coverage": 0.9524999999999999,
+      "mean_gradient_pointwise_coverage": 1.0,
+      "mean_gradient_reportable_region_coverage": 1.0,
+      "mean_log_gradient_pointwise_coverage": 1.0,
+      "mean_log_gradient_reportable_region_coverage": 1.0,
+      "mean_profile_rmse": 0.04029057447078186,
+      "mean_gradient_rmse": 0.0372302420306853,
+      "mean_nonpositive_lower_band_fraction": 0.0
+    }
+  ]
+}
