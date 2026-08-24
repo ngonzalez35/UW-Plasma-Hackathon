@@ -70,6 +70,15 @@ streamlit run app.py
 
 The default selection, shot `141687` near `0.315 s`, is a high-signal demo case.
 
+## Pedagogical project guide
+
+The app includes a **Download the pedagogical project guide (PDF)** button near
+the top of the page. The same six-page guide is available directly at
+[`output/pdf/mpts_bayesian_profile_lab_pedagogical_companion.pdf`](output/pdf/mpts_bayesian_profile_lab_pedagogical_companion.pdf).
+It explains the processed MPTS data, positive Bayesian profile model, analytic
+gradient propagation, validation evidence, and limits on scientific
+interpretation.
+
 ## Test and validate it
 
 ```bash

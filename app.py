@@ -13,7 +13,11 @@ from thomson_profiles.gp import FitConfig, assess_profile_validity, fit_profile
 from thomson_profiles.plotting import make_profile_figure
 
 
-DATA_PATH = Path(__file__).with_name("nstx-profiles.hdf5")
+ROOT = Path(__file__).resolve().parent
+DATA_PATH = ROOT / "nstx-profiles.hdf5"
+PEDAGOGICAL_PDF_PATH = (
+    ROOT / "output" / "pdf" / "mpts_bayesian_profile_lab_pedagogical_companion.pdf"
+)
 
 st.set_page_config(page_title="MPTS Bayesian Profile Lab", page_icon="⚛️", layout="wide")
 
@@ -49,6 +53,20 @@ st.info(
     "Tₑ, nₑ, and their uncertainties at discrete radii. This app fits those profile points; "
     "it does not fit the raw scattered-light spectrum."
 )
+
+if PEDAGOGICAL_PDF_PATH.exists():
+    st.download_button(
+        "Download the pedagogical project guide (PDF)",
+        data=PEDAGOGICAL_PDF_PATH.read_bytes(),
+        file_name=PEDAGOGICAL_PDF_PATH.name,
+        mime="application/pdf",
+        help=(
+            "A six-page companion explaining the diagnostic data, Bayesian model, "
+            "derivatives, validation, and scientific limitations."
+        ),
+    )
+else:
+    st.caption("The pedagogical project guide has not been built in this checkout.")
 
 with st.expander("Bayesian profile model used by this app", expanded=True):
     st.markdown(
