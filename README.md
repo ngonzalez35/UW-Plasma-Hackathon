@@ -4,6 +4,28 @@ Streamlit application for reconstructing NSTX multipoint Thomson-scattering
 (MPTS) electron-temperature and electron-density profiles with quantified
 uncertainty in the profiles and their radial derivatives.
 
+## Two different fitting stages
+
+The NSTX-U diagnostic first fits calibrated polychromator signals to a Thomson
+scattering spectrum. Schematically,
+
+\[
+\mu_j(T_e,n_e)=b_j+A E_L n_e
+\int \mathcal T_j(\lambda)\eta_j(\lambda)
+S_{\lambda}^{\mathrm{Selden}}(\lambda;T_e,\theta)\,d\lambda.
+\]
+
+The spectral shape and width constrain \(T_e\), while the calibrated amplitude
+constrains \(n_e\). The [NSTX-U MPTS analysis
+framework](https://www.osti.gov/servlets/purl/1510312) uses Selden-spectrum
+predictions, measured filter responses, detector calibration, and spectral
+chi-squared minimization for this upstream stage.
+
+This repository does **not** re-fit the raw spectrum. `nstx-profiles.hdf5`
+already contains the processed \(T_e\), \(n_e\), and reported uncertainties. The
+application starts at the second stage: Bayesian reconstruction of continuous
+spatial profiles from those discrete measurements.
+
 The default reconstruction is a positive latent-log Gaussian process:
 
 \[
@@ -106,6 +128,6 @@ mapping, an outward branch convention, and propagation of equilibrium uncertaint
   framework](https://www.osti.gov/servlets/purl/1510312).
 
 The implementation is a hackathon-scale approximation, not a validated production
-diagnostic. Its multi-start Laplace mixture should be compared with HMC on
+diagnostic. Its Laplace/quadrature approximation should be compared with HMC on
 representative high-signal, flat, contaminated-channel, and no-plasma cases before
 scientific deployment.

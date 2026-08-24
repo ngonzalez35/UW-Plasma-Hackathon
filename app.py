@@ -44,7 +44,54 @@ st.caption(
     "density profiles, with analytically propagated profile and gradient uncertainty."
 )
 
-with st.expander("Bayesian fitting equations", expanded=True):
+with st.expander("Thomson physics and Bayesian fitting equations", expanded=True):
+    st.markdown("#### 1. Thomson spectral fit — upstream diagnostic stage")
+    st.markdown(
+        "A calibrated polychromator measures the laser light scattered into several "
+        "wavelength bands. A compact detector-channel model for the NSTX-U analysis is"
+    )
+    st.latex(
+        r"""
+        \mu_j(T_e,n_e)=b_j+A E_L n_e
+        \int \mathcal T_j(\lambda)\,\eta_j(\lambda)\,
+        S_{\lambda}^{\rm Selden}(\lambda;T_e,\theta)\,d\lambda .
+        """
+    )
+    st.markdown(
+        r"Here $\mathcal T_j$ and $\eta_j$ are the filter transmission and detector "
+        "efficiency, while the remaining geometry, throughput, and gain are collected in "
+        r"$A$. The temperature and common amplitude are obtained from a channel-space fit:"
+    )
+    st.latex(
+        r"""
+        (\widehat T_e,\widehat a)
+        =\arg\min_{T_e,a}\sum_j
+        \frac{[I_j^{\rm obs}-\mu_j(T_e,a)]^2}{\sigma_{I,j}^2},
+        \qquad
+        \widehat n_e=\mathcal C_{\rm abs}(\widehat a,E_L).
+        """
+    )
+    st.caption(
+        "$E_L$ is the measured laser-pulse energy, $b_j$ is background, and "
+        "$\\mathcal C_{\\rm abs}$ denotes the Rayleigh/Raman absolute-density calibration. "
+        "The displayed detector equation is a compact representation of the reported NSTX-U "
+        "analysis chain, not source code from the upstream diagnostic."
+    )
+    st.markdown(
+        "Thus spectral broadening constrains $T_e$, while calibrated scattered-light "
+        "amplitude constrains $n_e$. NSTX-U uses Selden-spectrum predictions, measured "
+        r"filter responses, detector calibration, and a spectral $\chi^2$ fit. See the "
+        "[NSTX-U MPTS analysis](https://www.osti.gov/servlets/purl/1510312) and the "
+        "[general Thomson spectral-density model](https://docs.plasmapy.org/en/stable/"
+        "api/plasmapy.diagnostics.thomson.spectral_density.html)."
+    )
+    st.warning(
+        "This application does not evaluate the spectral equations above. The bundled HDF5 "
+        "file already contains processed Tₑ, nₑ, and their uncertainties. Our inference starts "
+        "with those spatial profile points."
+    )
+
+    st.markdown("#### 2. Bayesian spatial-profile fit — this application")
     st.markdown(
         "For either $f(R)=T_e(R)$ or $f(R)=n_e(R)$, the default model places a "
         "Gaussian-process prior on a dimensionless log profile while retaining the "
