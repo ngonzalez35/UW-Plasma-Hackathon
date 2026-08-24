@@ -3,7 +3,7 @@
 This is a polarization-focused companion to ``cold_plasma_dispersion.py``.
 The original file is not modified.  Run with:
 
-    .venv/bin/python cold_plasma_polarization.py
+    python cold_plasma_polarization.py
 """
 
 from __future__ import annotations
