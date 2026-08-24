@@ -91,7 +91,7 @@ def build_explorer(d=18.0, B0=1.0, u=1 / 1836.15, theta_deg=45.0,
     cone_angle_full = np.linspace(0.0, 2*np.pi, 361)
 
     fig, axes = plt.subplots(2, 4, figsize=(18, 10))
-    fig.subplots_adjust(left=0.065, right=0.985, top=0.865, bottom=0.25,
+    fig.subplots_adjust(left=0.065, right=0.985, top=0.865, bottom=0.32,
                         hspace=0.43, wspace=0.34)
     (ax_n2, ax_disp, ax_surface, ax_pol,
      ax_kpar, ax_kperp, ax_components, ax_presets) = axes.flat
@@ -165,13 +165,13 @@ def build_explorer(d=18.0, B0=1.0, u=1 / 1836.15, theta_deg=45.0,
     ax_components.legend(fontsize=8)
 
     slider_data = (
-        (r"density $d=\log_{10}(n_e/\mathrm{m}^{-3})$", 14., 21., d, 0.195),
-        (r"field $\log_{10}(B_0/\mathrm{T})$", -3., 1., np.log10(B0), 0.155),
-        (r"mass ratio $\log_{10}(m_e/m_i)$", -4.5, -1., np.log10(u), 0.115),
+        (r"density $d=\log_{10}(n_e/\mathrm{m}^{-3})$", 14., 21., d, 0.185),
+        (r"field $\log_{10}(B_0/\mathrm{T})$", -3., 1., np.log10(B0), 0.148),
+        (r"mass ratio $\log_{10}(m_e/m_i)$", -4.5, -1., np.log10(u), 0.111),
         (r"angle $\theta=\angle(\mathbf{k},\mathbf{B}_0)$ [deg]",
-         0., 90., theta_deg, 0.075),
+         0., 90., theta_deg, 0.074),
         (r"polarization frequency $\log_{10}(\omega/\omega_{ce})$",
-         -5., np.log10(3.), np.log10(fixed_x), 0.035),
+         -5., np.log10(3.), np.log10(fixed_x), 0.037),
     )
     sliders = []
     for label, low, high, initial, ypos in slider_data:
