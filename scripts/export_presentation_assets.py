@@ -250,11 +250,134 @@ def posterior_to_physics() -> None:
     save(fig, "posterior-to-physics.png")
 
 
+def complete_pipeline() -> None:
+    fig, ax = setup_canvas(12.0, 5.2)
+
+    ax.text(
+        0.50,
+        0.91,
+        r"$z(R)\sim\mathcal{GP}(\beta,k_{5/2}),\qquad "
+        r"f(R)=f_{\rm ref}e^{z(R)}>0,\qquad "
+        r"y_i\mid z\sim\mathcal{N}\!\left(f(R_i),\sigma_i^2\right)$",
+        ha="center",
+        va="center",
+        fontsize=21,
+        color=CHARCOAL,
+    )
+
+    nodes = [
+        (
+            0.025,
+            "Kernel prior",
+            r"$k_{5/2}(R,R')$",
+            r"$\ell$ controls spatial" "\ncorrelation",
+            False,
+        ),
+        (
+            0.275,
+            "Measurements",
+            r"$(R_i,\,y_i,\,\sigma_i)$",
+            "discrete values\nwith error bars",
+            False,
+        ),
+        (
+            0.525,
+            "Posterior profiles",
+            r"$p\!\left(f(R)\mid\mathcal{D}\right)$",
+            "median + credible\nband + samples",
+            True,
+        ),
+        (
+            0.775,
+            "Physical outputs",
+            r"$f'(R),\;G_R,\;L_{f,R}$",
+            "gradients and\nscale lengths",
+            False,
+        ),
+    ]
+    width = 0.20
+    for index, (x, title, equation, subtitle, accent) in enumerate(nodes):
+        box = FancyBboxPatch(
+            (x, 0.29),
+            width,
+            0.42,
+            boxstyle="round,pad=0.012,rounding_size=0.018",
+            facecolor=PALE_RED if accent else "white",
+            edgecolor=UW_RED if accent else MID_GRAY,
+            linewidth=2.6,
+        )
+        ax.add_patch(box)
+        ax.text(
+            x + width / 2,
+            0.61,
+            title,
+            ha="center",
+            va="center",
+            fontsize=15.5,
+            fontweight="bold",
+            color=CHARCOAL,
+        )
+        ax.text(
+            x + width / 2,
+            0.49,
+            equation,
+            ha="center",
+            va="center",
+            fontsize=17,
+            color=CHARCOAL,
+        )
+        ax.text(
+            x + width / 2,
+            0.36,
+            subtitle,
+            ha="center",
+            va="center",
+            fontsize=12.5,
+            color=MID_GRAY,
+            linespacing=1.2,
+        )
+        if index < len(nodes) - 1:
+            if index == 0:
+                ax.text(
+                    (x + width + nodes[index + 1][0]) / 2,
+                    0.50,
+                    "+",
+                    ha="center",
+                    va="center",
+                    fontsize=30,
+                    color=CHARCOAL,
+                )
+            else:
+                arrow = FancyArrowPatch(
+                    (x + width + 0.008, 0.50),
+                    (nodes[index + 1][0] - 0.008, 0.50),
+                    arrowstyle="-|>",
+                    mutation_scale=20,
+                    linewidth=2.5,
+                    color=UW_RED,
+                )
+                ax.add_patch(arrow)
+
+    ax.text(
+        0.50,
+        0.16,
+        r"small $\sigma_i$ $\rightarrow$ stronger measurement influence"
+        r"      $\bullet$      large $\sigma_i$ $\rightarrow$ weaker influence"
+        r"      $\bullet$      posterior samples propagate uncertainty to every output",
+        ha="center",
+        va="center",
+        fontsize=13.5,
+        color=MID_GRAY,
+    )
+    save(fig, "bayesian-profile-complete-pipeline.png")
+
+
 def main() -> None:
     bayesian_update_flow()
     positive_profile_model()
     kernel_length_scale()
     posterior_to_physics()
+    complete_pipeline()
 
 
 if __name__ == "__main__":
