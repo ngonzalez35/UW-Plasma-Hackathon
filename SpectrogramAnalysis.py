@@ -1,4 +1,6 @@
 """Interactive spectral analysis for signals stored in an HDF5 file.
+
+This project was created with the help of AI tools.
 """
 
 import os
@@ -20,8 +22,9 @@ EPSILON = np.finfo(np.float64).tiny
 MAX_SPECTROGRAM_COLUMNS = 4000
 # Used only when an HDF5 file does not contain a usable time dataset.
 FALLBACK_SAMPLE_RATE_HZ = 1_000_000.0
-# Conversion factors for timestamps stored in different units.
-TIME_FACTORS = {"s": 1.0, "ms": 1e-3, "us": 1e-6, "ns": 1e-9}
+# Time datasets store timestamps in milliseconds by default; analysis uses seconds.
+DEFAULT_TIME_UNIT = "ms"
+TIME_FACTORS = {"ms": 1e-3, "s": 1.0, "us": 1e-6, "ns": 1e-9}
 
 
 class SpectrogramAnalysisApp(tk.Tk):
@@ -51,7 +54,8 @@ class SpectrogramAnalysisApp(tk.Tk):
         self.power_min_var = tk.DoubleVar(value=-120.0)
         self.power_max_var = tk.DoubleVar(value=20.0)
         self.raw_units_var = tk.StringVar(value="Amplitude")
-        self.time_unit_var = tk.StringVar(value="s")
+        self.time_unit_var = tk.StringVar(value=DEFAULT_TIME_UNIT)
+        self.time_display_unit = DEFAULT_TIME_UNIT
         self.slice_index_var = tk.IntVar(value=0)
         self.log_freq_var = tk.BooleanVar(value=False)
         self.log_power_var = tk.BooleanVar(value=True)
@@ -109,9 +113,11 @@ class SpectrogramAnalysisApp(tk.Tk):
         grid_controls = ttk.Frame(controls)
         grid_controls.pack(fill="x", padx=10, pady=8)
 
+        self.time_min_label = ttk.Label(grid_controls)
+        self.time_max_label = ttk.Label(grid_controls)
         fields = (
-            ("Time min (s)", self.time_min_var),
-            ("Time max (s)", self.time_max_var),
+            (self.time_min_label, self.time_min_var),
+            (self.time_max_label, self.time_max_var),
             ("Frequency min (Hz)", self.freq_min_var),
             ("Frequency max (Hz)", self.freq_max_var),
             ("Power min", self.power_min_var),
@@ -122,7 +128,11 @@ class SpectrogramAnalysisApp(tk.Tk):
         for index, (label, variable) in enumerate(fields):
             row, col = divmod(index, 4)
             base = col * 2
-            ttk.Label(grid_controls, text=label + ":").grid(
+            if isinstance(label, str):
+                label_widget = ttk.Label(grid_controls, text=label + ":")
+            else:
+                label_widget = label
+            label_widget.grid(
                 row=row, column=base, sticky="w", padx=(0 if col == 0 else 18, 6), pady=3
             )
             ttk.Entry(grid_controls, textvariable=variable, width=12).grid(
@@ -136,6 +146,7 @@ class SpectrogramAnalysisApp(tk.Tk):
             options, textvariable=self.time_unit_var, values=tuple(TIME_FACTORS),
             width=5, state="readonly",
         ).pack(side="left", padx=(5, 18))
+        self.time_unit_var.trace_add("write", self._on_time_unit_changed)
         ttk.Checkbutton(options, text="Log frequency axis", variable=self.log_freq_var).pack(side="left")
         ttk.Checkbutton(options, text="Log power (dB/Hz)", variable=self.log_power_var).pack(side="left", padx=18)
         ttk.Button(options, text="Apply", command=self.apply_settings).pack(side="left")
@@ -148,7 +159,30 @@ class SpectrogramAnalysisApp(tk.Tk):
         self.slice_time_label.pack(side="left")
 
         # Start with empty plots until a dataset is selected.
+        self._update_time_unit_labels()
         self.clear_plot()
+
+    def _time_display_factor(self):
+        return 1.0 / TIME_FACTORS[self.time_display_unit]
+
+    def _update_time_unit_labels(self):
+        unit = self.time_display_unit
+        self.time_min_label.config(text=f"Time min ({unit}):")
+        self.time_max_label.config(text=f"Time max ({unit}):")
+
+    def _on_time_unit_changed(self, *_args):
+        new_unit = self.time_unit_var.get()
+        if new_unit == self.time_display_unit:
+            return
+        old_factor = TIME_FACTORS[self.time_display_unit]
+        new_factor = TIME_FACTORS[new_unit]
+        try:
+            self.time_min_var.set(float(self.time_min_var.get()) * old_factor / new_factor)
+            self.time_max_var.set(float(self.time_max_var.get()) * old_factor / new_factor)
+        except (ValueError, tk.TclError):
+            pass
+        self.time_display_unit = new_unit
+        self._update_time_unit_labels()
 
     def on_close(self):
         # Close the HDF5 handle before destroying the Tk window.
@@ -273,8 +307,9 @@ class SpectrogramAnalysisApp(tk.Tk):
 
         self.current_dataset_path = path
         self.data, self.time_seconds = values, times
-        self.time_min_var.set(times[0])
-        self.time_max_var.set(times[-1])
+        display_factor = self._time_display_factor()
+        self.time_min_var.set(times[0] * display_factor)
+        self.time_max_var.set(times[-1] * display_factor)
         self.channel_label.config(
             text=f"Selected channel: {path} — {values.size:,} samples; time: {time_source}"
         )
@@ -306,7 +341,8 @@ class SpectrogramAnalysisApp(tk.Tk):
             return
         try:
             n_fft = int(self.n_fft_var.get())
-            tmin, tmax = float(self.time_min_var.get()), float(self.time_max_var.get())
+            tmin = float(self.time_min_var.get()) * TIME_FACTORS[self.time_display_unit]
+            tmax = float(self.time_max_var.get()) * TIME_FACTORS[self.time_display_unit]
             fmin, fmax = float(self.freq_min_var.get()), float(self.freq_max_var.get())
             pmin, pmax = float(self.power_min_var.get()), float(self.power_max_var.get())
         except (ValueError, tk.TclError):
@@ -391,15 +427,18 @@ class SpectrogramAnalysisApp(tk.Tk):
         self.cax.clear()
         self.cax.set_axis_on()
         self.slice_marker = None
-        self.raw_ax.plot(self.time_seconds, self.data, color="tab:blue", linewidth=0.8)
+        display_factor = self._time_display_factor()
+        display_times = self.time_seconds * display_factor
+        display_spectrogram_times = times * display_factor
+        self.raw_ax.plot(display_times, self.data, color="tab:blue", linewidth=0.8)
         self.raw_ax.set(title="Time-series signal", ylabel="Amplitude")
         self.raw_ax.grid(True, alpha=0.2)
         self.raw_ax.tick_params(labelbottom=False)
-        mesh = self.spec_ax.pcolormesh(times, frequencies, power, shading="auto", cmap="viridis", vmin=pmin, vmax=pmax)
-        self.spec_ax.set(title="Auto-power spectrogram", xlabel="Time (s)", ylabel="Frequency (Hz)")
+        mesh = self.spec_ax.pcolormesh(display_spectrogram_times, frequencies, power, shading="auto", cmap="viridis", vmin=pmin, vmax=pmax)
+        self.spec_ax.set(title="Auto-power spectrogram", xlabel=f"Time ({self.time_display_unit})", ylabel="Frequency (Hz)")
         self.spec_ax.set_yscale("log" if self.log_freq_var.get() else "linear")
         self.spec_ax.set_ylim(fmin, fmax)
-        limits = (tmin, tmax)
+        limits = (tmin * display_factor, tmax * display_factor)
         self.raw_ax.set_xlim(limits)
         self.spec_ax.set_xlim(limits)
         colorbar = self.figure.colorbar(mesh, cax=self.cax)
@@ -415,8 +454,9 @@ class SpectrogramAnalysisApp(tk.Tk):
         self.slice_index_var.set(index)
         self.slice_ax.clear()
         self.slice_ax.plot(self.spectrogram_data[:, index], self.spectrogram_freqs, color="tab:orange")
+        display_time = self.spectrogram_times[index] * self._time_display_factor()
         self.slice_ax.set(
-            title=f"Power spectrum at t={self.spectrogram_times[index]:.6g} s",
+            title=f"Power spectrum at t={display_time:.6g} {self.time_display_unit}",
             xlabel=self._power_label(),
             ylabel="Frequency (Hz)",
         )
@@ -426,10 +466,10 @@ class SpectrogramAnalysisApp(tk.Tk):
         self.slice_ax.yaxis.tick_right()
         self.slice_ax.yaxis.set_label_position("right")
         self.slice_ax.grid(True, alpha=0.25)
-        self.slice_time_label.config(text=f"{self.spectrogram_times[index]:.6g} s")
+        self.slice_time_label.config(text=f"{display_time:.6g} {self.time_display_unit}")
         if self.slice_marker is not None:
             self.slice_marker.remove()
-        self.slice_marker = self.spec_ax.axvline(self.spectrogram_times[index], color="white", alpha=0.8)
+        self.slice_marker = self.spec_ax.axvline(display_time, color="white", alpha=0.8)
         if draw:
             self.canvas.draw_idle()
 
@@ -437,7 +477,8 @@ class SpectrogramAnalysisApp(tk.Tk):
         # Map a click in the spectrogram to the nearest available time slice.
         if event.inaxes is not self.spec_ax or event.xdata is None or self.spectrogram_times.size == 0:
             return
-        index = int(np.argmin(np.abs(self.spectrogram_times - event.xdata)))
+        time_seconds = event.xdata * TIME_FACTORS[self.time_display_unit]
+        index = int(np.argmin(np.abs(self.spectrogram_times - time_seconds)))
         self._update_slice(index)
 
     def clear_plot(self):
@@ -449,7 +490,11 @@ class SpectrogramAnalysisApp(tk.Tk):
         for axis in (self.raw_ax, self.spec_ax, self.slice_ax, self.cax):
             axis.clear()
         self.raw_ax.set(title="Time-series signal", ylabel="Amplitude")
-        self.spec_ax.set(title="Auto-power spectrogram", xlabel="Time (s)", ylabel="Frequency (Hz)")
+        self.spec_ax.set(
+            title="Auto-power spectrogram",
+            xlabel=f"Time ({self.time_display_unit})",
+            ylabel="Frequency (Hz)",
+        )
         self.slice_ax.set(title="Power spectrum", xlabel="PSD", ylabel="Frequency (Hz)")
         self.slice_ax.yaxis.tick_right()
         self.slice_ax.yaxis.set_label_position("right")
